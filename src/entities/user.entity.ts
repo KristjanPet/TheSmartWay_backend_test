@@ -1,6 +1,8 @@
 import { Exclude } from 'class-transformer';
 import { Column, Entity, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { Base } from './base.entity';
+import { Note } from './note.entity';
+import { Mark } from './mark.entity';
 
 @Entity()
 export class User extends Base {
@@ -14,9 +16,9 @@ export class User extends Base {
   @Exclude()
   password: string;
 
-  // @OneToMany(() => Quote, (quote) => quote.author)
-  // quote: Quote[]
+  @OneToMany(() => Note, (note) => note.user)
+  note: Note[];
 
-  // @OneToMany(() => Vote, (vote) => vote.user)
-  // vote: Vote[]
+  @OneToMany(() => Mark, (mark) => mark.user)
+  mark: Mark[];
 }
