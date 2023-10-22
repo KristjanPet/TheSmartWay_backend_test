@@ -8,6 +8,8 @@ import { ConfigModule } from '@nestjs/config';
 import { configValidationSchema } from 'src/config/schema.config';
 import { DatabaseModule } from './database/database.module';
 import { LoggerMiddleware } from 'src/middleware/logger.middleware';
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -17,6 +19,8 @@ import { LoggerMiddleware } from 'src/middleware/logger.middleware';
       validationSchema: configValidationSchema,
     }),
     DatabaseModule,
+    AuthModule,
+    UserModule,
   ],
   controllers: [],
   providers: [],
