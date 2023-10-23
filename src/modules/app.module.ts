@@ -10,6 +10,9 @@ import { DatabaseModule } from './database/database.module';
 import { LoggerMiddleware } from 'src/middleware/logger.middleware';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
+import { NoteModule } from './note/note.module';
+import { CardModule } from './card/card.module';
+import { MarkModule } from './mark/mark.module';
 
 @Module({
   imports: [
@@ -21,6 +24,9 @@ import { UserModule } from './user/user.module';
     DatabaseModule,
     AuthModule,
     UserModule,
+    NoteModule,
+    CardModule,
+    MarkModule,
   ],
   controllers: [],
   providers: [],

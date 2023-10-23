@@ -7,10 +7,10 @@ import Logging from 'src/library/Logging';
 import { Repository } from 'typeorm';
 
 @Injectable()
-export abstract class AbstractService {
+export abstract class AbstractService<T> {
   constructor(protected readonly repository: Repository<any>) {}
 
-  async findAll(relations = []): Promise<any[]> {
+  async findAll(relations = []): Promise<T[]> {
     try {
       return this.repository.find({ relations });
     } catch (error) {
@@ -21,7 +21,7 @@ export abstract class AbstractService {
     }
   }
 
-  async findBy(condition, relations = []): Promise<any> {
+  async findBy(condition, relations = []): Promise<T> {
     try {
       return this.repository.findOne({
         where: condition,
@@ -35,7 +35,7 @@ export abstract class AbstractService {
     }
   }
 
-  async findById(id: string, relations = []): Promise<any> {
+  async findById(id: string, relations = []): Promise<T> {
     try {
       const element = await this.repository.findOne({
         where: { id },
@@ -54,7 +54,7 @@ export abstract class AbstractService {
     }
   }
 
-  async remove(id: string): Promise<any> {
+  async remove(id: string): Promise<T> {
     const element = await this.findById(id);
     try {
       return this.repository.remove(element);

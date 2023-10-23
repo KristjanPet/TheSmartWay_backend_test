@@ -5,11 +5,7 @@ import { Match } from 'src/decorators/match.decorator';
 export class RegisterUserDto {
   @ApiProperty({ required: false })
   @IsOptional()
-  first_name?: string;
-
-  @ApiProperty({ required: false })
-  @IsOptional()
-  last_name?: string;
+  name?: string;
 
   @ApiProperty({ required: true })
   @IsNotEmpty()

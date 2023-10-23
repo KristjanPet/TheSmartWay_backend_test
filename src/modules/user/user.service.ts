@@ -17,11 +17,10 @@ import { CreateUserDto } from './Dto/create-user.dto';
 import { UpdateUserDto } from './Dto/update-user.dto';
 
 @Injectable()
-export class UserService extends AbstractService /*<User>*/ {
+export class UserService extends AbstractService<User> {
   constructor(
-    @InjectRepository(User) private readonly userRepository: Repository<User>, // @Inject(forwardRef(() => AuthService))
-  ) // private readonly authService: AuthService,
-  {
+    @InjectRepository(User) private readonly userRepository: Repository<User>, // @Inject(forwardRef(() => AuthService)) // private readonly authService: AuthService,
+  ) {
     super(userRepository);
   }
 
