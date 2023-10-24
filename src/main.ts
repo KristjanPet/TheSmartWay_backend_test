@@ -4,6 +4,7 @@ import * as cookieParser from 'cookie-parser';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import Logging from './library/Logging';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import rateLimit from 'express-rate-limit';
 
 const initSwagger = (app: INestApplication) => {
   const config = new DocumentBuilder()
@@ -24,6 +25,11 @@ const initValidation = (app: INestApplication) =>
     }),
   );
 
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15min
+  max: 100, // 100 requests
+});
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     bufferLogs: true,
@@ -34,6 +40,13 @@ async function bootstrap() {
   });
   app.useGlobalPipes(new ValidationPipe());
   app.use(cookieParser());
+  app.use((req, res, next) => {
+    if (req.path.startsWith('/api/docs')) {
+      next();
+    } else {
+      limiter(req, res, next);
+    }
+  });
 
   //global route prefix
   app.setGlobalPrefix('api');
