@@ -33,6 +33,15 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @ApiCreatedResponse({ description: 'Get logged in user.' })
+  @ApiBadRequestResponse({ description: 'Error getting logedin user' })
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  async user(@Req() req: Request): Promise<User> {
+    const cookie = req.cookies['access_token'];
+    return this.authService.user(cookie);
+  }
+
   @ApiCreatedResponse({ description: 'Signup user.' })
   @ApiBadRequestResponse({ description: 'Error signigup user' })
   @Public()
@@ -63,15 +72,6 @@ export class AuthController {
       expires: new Date(Date.now() + 3600 * 1000 * 24 * 30 * 1),
     });
     return req.user;
-  }
-
-  @ApiCreatedResponse({ description: 'Get logged in user.' })
-  @ApiBadRequestResponse({ description: 'Error getting logedin user' })
-  @Get()
-  @HttpCode(HttpStatus.OK)
-  async user(@Req() req: Request): Promise<User> {
-    const cookie = req.cookies['access_token'];
-    return this.authService.user(cookie);
   }
 
   @ApiCreatedResponse({ description: 'Signout user.' })

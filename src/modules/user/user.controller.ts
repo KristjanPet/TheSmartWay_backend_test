@@ -18,7 +18,11 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-// import { ApiBadRequestResponse, ApiCreatedResponse, ApiTags } from '@nestjs/swagger/dist/index'
+import {
+  ApiBadRequestResponse,
+  ApiCreatedResponse,
+  ApiTags,
+} from '@nestjs/swagger/dist/index';
 import { User } from 'src/entities/user.entity';
 import { Request } from 'express';
 import { AuthService } from 'src/modules/auth/auth.service';
@@ -28,7 +32,7 @@ import { CreateUserDto } from './Dto/create-user.dto';
 import { UpdateUserDto } from './Dto/update-user.dto';
 import { UserService } from './user.service';
 
-// @ApiTags('User')
+@ApiTags('User')
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
 export class UserController {
@@ -39,16 +43,16 @@ export class UserController {
 
   // GET
 
-  // @ApiCreatedResponse({ description: 'List all users.' })
-  // @ApiBadRequestResponse({ description: 'Error for list of users' })
+  @ApiCreatedResponse({ description: 'List all users.' })
+  @ApiBadRequestResponse({ description: 'Error for list of users' })
   @Get()
   @HttpCode(HttpStatus.OK)
   async findAll(): Promise<User[]> {
     return this.userService.findAll();
   }
 
-  // @ApiCreatedResponse({ description: 'Get one user.' })
-  // @ApiBadRequestResponse({ description: 'Error getting one user' })
+  @ApiCreatedResponse({ description: 'Get one user.' })
+  @ApiBadRequestResponse({ description: 'Error getting one user' })
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   async findOne(@Param('id') id: string): Promise<User> {
@@ -57,8 +61,8 @@ export class UserController {
 
   //POST
 
-  // @ApiCreatedResponse({ description: 'Create a user.' })
-  // @ApiBadRequestResponse({ description: 'Error for creating a user' })
+  @ApiCreatedResponse({ description: 'Create a user.' })
+  @ApiBadRequestResponse({ description: 'Error for creating a user' })
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createUserDto: CreateUserDto): Promise<User> {
@@ -67,8 +71,8 @@ export class UserController {
 
   // PATCH
 
-  // @ApiCreatedResponse({ description: 'Update users info.' })
-  // @ApiBadRequestResponse({ description: 'Error updating users info' })
+  @ApiCreatedResponse({ description: 'Update users info.' })
+  @ApiBadRequestResponse({ description: 'Error updating users info' })
   @Patch('/update-user')
   @HttpCode(HttpStatus.OK)
   async updateUser(
@@ -81,8 +85,8 @@ export class UserController {
   }
 
   // DELTE
-  // @ApiCreatedResponse({ description: 'Delete user.' })
-  // @ApiBadRequestResponse({ description: 'Error deleting user' })
+  @ApiCreatedResponse({ description: 'Delete user.' })
+  @ApiBadRequestResponse({ description: 'Error deleting user' })
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
   async remove(@Param('id') id: string): Promise<User> {
