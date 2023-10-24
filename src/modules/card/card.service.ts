@@ -16,6 +16,17 @@ export class CardService extends AbstractService<Card> {
     super(cardRepository);
   }
 
+  async findByNote(noteId: string): Promise<Card[]> {
+    try {
+      return this.cardRepository.findBy({ note: { id: noteId } });
+    } catch (error) {
+      Logging.error(error);
+      throw new BadRequestException(
+        'something went wrong while searcing for cards',
+      );
+    }
+  }
+
   async create(createCardDto: CreateCardDto, noteId: string): Promise<Card> {
     try {
       const note = await this.noteService.findById(noteId);

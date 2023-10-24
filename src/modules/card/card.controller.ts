@@ -6,6 +6,7 @@ import {
   Body,
   HttpStatus,
   Param,
+  Get,
 } from '@nestjs/common';
 import { CardService } from './card.service';
 import {
@@ -20,6 +21,16 @@ import { CreateCardDto } from './dto/create-card.dto';
 @Controller('card')
 export class CardController {
   constructor(private readonly cardService: CardService) {}
+
+  //GET
+
+  @ApiCreatedResponse({ description: 'List all cards from note.' })
+  @ApiBadRequestResponse({ description: 'Error getting list of cards' })
+  @Get(':id')
+  @HttpCode(HttpStatus.OK)
+  async findByNoteId(@Param('id') noteId: string): Promise<Card[]> {
+    return await this.cardService.findByNote(noteId);
+  }
 
   //POST
 
