@@ -33,7 +33,7 @@ This API is designed to support a learning application where users can register,
 
 ### Marks
 
-- **POST** `/api/v1/mark`: Create a new mark.
+- **POST** `/api/mark`: Create a new mark.
 
 ## Grading System
 
