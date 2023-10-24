@@ -13,7 +13,7 @@ export class Mark extends Base {
   active: boolean;
 
   @ManyToOne(() => Card, (card) => card.mark)
-  @JoinColumn({ name: 'markId' })
+  @JoinColumn({ name: 'cardId' })
   card: Card;
 
   @ManyToOne(() => User, (user) => user.mark)

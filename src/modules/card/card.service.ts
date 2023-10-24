@@ -29,4 +29,13 @@ export class CardService extends AbstractService<Card> {
       );
     }
   }
+
+  async setFinished(card: Card) {
+    try {
+      this.cardRepository.update(card.id, { finished: true });
+    } catch (error) {
+      Logging.error(error);
+      throw new BadRequestException('something went wrong while updating card');
+    }
+  }
 }

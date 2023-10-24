@@ -23,8 +23,8 @@ export class CardController {
 
   //POST
 
-  @ApiCreatedResponse({ description: 'Create a note.' })
-  @ApiBadRequestResponse({ description: 'Error for creating a note' })
+  @ApiCreatedResponse({ description: 'Create a card.' })
+  @ApiBadRequestResponse({ description: 'Error for creating a card' })
   @Post(':id')
   @HttpCode(HttpStatus.CREATED)
   async create(
