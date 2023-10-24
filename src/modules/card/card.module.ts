@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { CardController } from './card.controller';
 import { CardService } from './card.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -9,7 +9,11 @@ import { JwtService } from '@nestjs/jwt';
 import { UserModule } from '../user/user.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Card]), UserModule, NoteModule],
+  imports: [
+    TypeOrmModule.forFeature([Card]),
+    UserModule,
+    forwardRef(() => NoteModule),
+  ],
   controllers: [CardController],
   providers: [CardService, AuthService, JwtService],
   exports: [CardService],

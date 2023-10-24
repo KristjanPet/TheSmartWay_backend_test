@@ -5,6 +5,8 @@ import {
   Body,
   HttpStatus,
   Req,
+  Param,
+  Get,
 } from '@nestjs/common';
 import { NoteService } from './note.service';
 import {
@@ -20,6 +22,16 @@ import { Request } from 'express';
 @Controller('note')
 export class NoteController {
   constructor(private readonly noteService: NoteService) {}
+
+  //GET
+
+  @ApiCreatedResponse({ description: 'Get percent finished cards.' })
+  @ApiBadRequestResponse({ description: 'Error getting precents of cards' })
+  @Get(':id/percent')
+  @HttpCode(HttpStatus.OK)
+  async findOne(@Param('id') id: string): Promise<number> {
+    return this.noteService.getPercent(id);
+  }
 
   //POST
 

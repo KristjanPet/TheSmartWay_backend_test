@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  forwardRef,
+} from '@nestjs/common';
 import { Card } from 'src/entities/card.entity';
 import { AbstractService } from '../common/abstract.service';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -11,7 +16,8 @@ import Logging from 'src/library/Logging';
 export class CardService extends AbstractService<Card> {
   constructor(
     @InjectRepository(Card) private readonly cardRepository: Repository<Card>,
-    private readonly noteService: NoteService, // private readonly authService: AuthService,
+    @Inject(forwardRef(() => NoteService))
+    private readonly noteService: NoteService,
   ) {
     super(cardRepository);
   }
@@ -19,6 +25,21 @@ export class CardService extends AbstractService<Card> {
   async findByNote(noteId: string): Promise<Card[]> {
     try {
       return this.cardRepository.findBy({ note: { id: noteId } });
+    } catch (error) {
+      Logging.error(error);
+      throw new BadRequestException(
+        'something went wrong while searcing for cards',
+      );
+    }
+  }
+
+  async findByNoteWithMark(noteId: string): Promise<Card[]> {
+    try {
+      return await this.cardRepository
+        .createQueryBuilder('card')
+        .leftJoinAndSelect('card.mark', 'mark', 'mark.active = true')
+        .where('card.noteId = :noteId', { noteId })
+        .getMany();
     } catch (error) {
       Logging.error(error);
       throw new BadRequestException(
@@ -41,9 +62,9 @@ export class CardService extends AbstractService<Card> {
     }
   }
 
-  async setFinished(card: Card) {
+  async setFinished(card: Card, state: boolean) {
     try {
-      this.cardRepository.update(card.id, { finished: true });
+      this.cardRepository.update(card.id, { finished: state });
     } catch (error) {
       Logging.error(error);
       throw new BadRequestException('something went wrong while updating card');

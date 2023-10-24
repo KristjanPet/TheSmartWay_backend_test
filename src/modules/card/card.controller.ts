@@ -32,6 +32,16 @@ export class CardController {
     return await this.cardService.findByNote(noteId);
   }
 
+  @ApiCreatedResponse({ description: 'List all cards from note with mark.' })
+  @ApiBadRequestResponse({
+    description: 'Error getting list of cards with mark',
+  })
+  @Get(':id/mark')
+  @HttpCode(HttpStatus.OK)
+  async findByNoteIdWithMark(@Param('id') noteId: string): Promise<Card[]> {
+    return await this.cardService.findByNoteWithMark(noteId);
+  }
+
   //POST
 
   @ApiCreatedResponse({ description: 'Create a card.' })

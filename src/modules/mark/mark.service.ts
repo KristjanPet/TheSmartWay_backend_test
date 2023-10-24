@@ -36,11 +36,16 @@ export class MarkService extends AbstractService<Mark> {
       }
 
       const mark = this.markRepository.create({ user, card, ...createMarkDto });
+      // Logging.warn(activeMark);
 
       if (mark.value == 5) {
-        this.cardService.setFinished(card);
+        //set card to finished
+        this.cardService.setFinished(card, true);
+      } else {
+        this.cardService.setFinished(card, false);
       }
 
+      // return mark;
       return this.markRepository.save(mark);
     } catch (error) {
       Logging.error(error);
@@ -61,14 +66,11 @@ export class MarkService extends AbstractService<Mark> {
 
   async findActiveMark(card: Card, user: User): Promise<Mark> {
     try {
-      const mark = await this.repository
-        .createQueryBuilder('mark')
-        .where('mark.cardId = :cardId', { cardId: card.id })
-        .andWhere('mark.userId = :userId', { userId: user.id })
-        .andWhere('mark.active = true')
-        .getOne();
-
-      return mark;
+      return this.markRepository.findOneBy({
+        card: { id: card.id },
+        user: { id: user.id },
+        active: true,
+      });
     } catch (error) {
       Logging.error(error);
       throw new BadRequestException(
