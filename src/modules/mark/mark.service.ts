@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  forwardRef,
+} from '@nestjs/common';
 import { Mark } from 'src/entities/mark.entity';
 import { AbstractService } from '../common/abstract.service';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,6 +19,7 @@ import { User } from 'src/entities/user.entity';
 export class MarkService extends AbstractService<Mark> {
   constructor(
     @InjectRepository(Mark) private readonly markRepository: Repository<Mark>,
+    @Inject(forwardRef(() => CardService))
     private readonly cardService: CardService,
     private readonly authService: AuthService,
   ) {
@@ -77,5 +83,12 @@ export class MarkService extends AbstractService<Mark> {
         'something went wrong while finding active mark',
       );
     }
+  }
+
+  async updateActiveMarks(cardId: string) {
+    await this.markRepository.update(
+      { card: { id: cardId }, active: true },
+      { active: false },
+    );
   }
 }

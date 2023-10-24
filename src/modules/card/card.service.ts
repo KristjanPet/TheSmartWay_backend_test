@@ -11,6 +11,7 @@ import { Repository } from 'typeorm';
 import { CreateCardDto } from './dto/create-card.dto';
 import { NoteService } from '../note/note.service';
 import Logging from 'src/library/Logging';
+import { MarkService } from '../mark/mark.service';
 
 @Injectable()
 export class CardService extends AbstractService<Card> {
@@ -18,6 +19,8 @@ export class CardService extends AbstractService<Card> {
     @InjectRepository(Card) private readonly cardRepository: Repository<Card>,
     @Inject(forwardRef(() => NoteService))
     private readonly noteService: NoteService,
+    @Inject(forwardRef(() => MarkService))
+    private readonly markService: MarkService,
   ) {
     super(cardRepository);
   }
@@ -54,6 +57,36 @@ export class CardService extends AbstractService<Card> {
 
       const card = this.cardRepository.create({ note, ...createCardDto });
       return this.cardRepository.save(card);
+    } catch (error) {
+      Logging.error(error);
+      throw new BadRequestException(
+        'something went wrong while creating a new note',
+      );
+    }
+  }
+
+  async reset(noteId: string): Promise<boolean | string> {
+    try {
+      const cards = await this.findByNote(noteId);
+
+      // Check if all cards have `finished` set to `true`
+      const allFinished = cards.every((card) => card.finished);
+
+      if (allFinished) {
+        // Update all cards to set `finished` to `false`
+        await this.cardRepository.update(
+          { note: { id: noteId } },
+          { finished: false },
+        );
+
+        for (const card of cards) {
+          await this.markService.updateActiveMarks(card.id);
+        }
+
+        return true;
+      } else {
+        return 'All cards must be finished before restarting';
+      }
     } catch (error) {
       Logging.error(error);
       throw new BadRequestException(

@@ -7,12 +7,14 @@ import { NoteModule } from '../note/note.module';
 import { AuthService } from '../auth/auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { UserModule } from '../user/user.module';
+import { MarkModule } from '../mark/mark.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Card]),
     UserModule,
     forwardRef(() => NoteModule),
+    forwardRef(() => MarkModule),
   ],
   controllers: [CardController],
   providers: [CardService, AuthService, JwtService],

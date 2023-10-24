@@ -7,6 +7,7 @@ import {
   HttpStatus,
   Param,
   Get,
+  Patch,
 } from '@nestjs/common';
 import { CardService } from './card.service';
 import {
@@ -53,5 +54,15 @@ export class CardController {
     @Body() createCardDto: CreateCardDto,
   ): Promise<Card> {
     return this.cardService.create(createCardDto, noteId);
+  }
+
+  // PATCH
+
+  @ApiCreatedResponse({ description: 'Reset cards.' })
+  @ApiBadRequestResponse({ description: 'Error reseting cards' })
+  @Patch(':id/reset')
+  @HttpCode(HttpStatus.OK)
+  async update(@Param('id') noteId: string): Promise<boolean | string> {
+    return this.cardService.reset(noteId);
   }
 }
