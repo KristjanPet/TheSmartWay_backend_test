@@ -35,6 +35,9 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.use(cookieParser());
 
+  //global route prefix
+  app.setGlobalPrefix('api');
+
   initSwagger(app);
   initValidation(app);
 
