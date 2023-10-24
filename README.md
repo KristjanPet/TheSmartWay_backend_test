@@ -1,73 +1,59 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Learning App API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This API is designed to support a learning application where users can register, log in, create notes, and within those notes, add cards with questions and answers. Users can also grade cards based on their understanding, with a grade of 5 indicating that the card topic is fully understood or "finished".
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Endpoints
 
-## Description
+### Auth
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **GET** `/api/auth`: Fetch the current loged in user.
+- **POST** `/api/auth/register`: Register a new user.
+- **POST** `/api/auth/login`: Log in an existing user.
+- **POST** `/api/auth/signout`: signout user.
 
-## Installation
+### User
 
-```bash
-$ npm install
-```
+- **GET** `/api/user`: Fetch all user's details.
+- **GET** `/api/user/:id`: Fetch the current user's details.
+- **PATCH** `/api/user`: Update the current user's details.
+- **POST** `/api/user`: create a user.
+- **DELETE** `/api/user`: Delete the current user's account.
 
-## Running the app
+### Notes
 
-```bash
-# development
-$ npm run start
+- **GET** `/api/note/:id/percent`: Get percent of finished questions.
+- **POST** `/api/v1/note`: Create a new note.
 
-# watch mode
-$ npm run start:dev
+### Cards
 
-# production mode
-$ npm run start:prod
-```
+- **GET** `/api/card/:id`: Fetch all cards for the current user.
+- **GET** `/api/card/:id/marks`: Fetch all cards for the current user with marks.
+- **POST** `/api/card/:id`: Create a new card.
+- **PATCH** `/api/card/:id/reset`: Reset all cards in note.
 
-## Test
+### Marks
 
-```bash
-# unit tests
-$ npm run test
+- **POST** `/api/v1/mark`: Create a new mark.
 
-# e2e tests
-$ npm run test:e2e
+## Grading System
 
-# test coverage
-$ npm run test:cov
-```
+Users can grade cards on a scale of 1 to 5, with the following interpretations:
+- **1**: Needs more review.
+- **2**: Partially understood.
+- **3**: Fairly understood but needs more practice.
+- **4**: Well understood with minor uncertainties.
+- **5**: Fully understood (Finished).
 
-## Support
+Once a card is graded as 5, it's considered "finished".
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Rate Limiting
 
-## Stay in touch
+To ensure fair usage and prevent abuse, the API has rate limiting in place. Each IP is limited to 100 requests every 15 minutes. Exceptions may apply to certain routes.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## Versioning
 
-## License
+The current version of the API is `v1`.
 
-Nest is [MIT licensed](LICENSE).
+---
+
+For more details on request payloads, headers, and specific response structures, refer to the API documentation available at `/api/v1/docs`.
