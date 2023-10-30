@@ -56,4 +56,4 @@ The current version of the API is `v1`.
 
 ---
 
-For more details on request payloads, headers, and specific response structures, refer to the API documentation available at `/api/v1/docs`.
+For more details on request payloads, headers, and specific response structures, refer to the API documentation available at `/api/docs`.
